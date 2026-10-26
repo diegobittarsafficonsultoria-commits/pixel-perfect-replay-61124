@@ -53,8 +53,8 @@ function Steps<T extends Record<string, string>>({ items, a, b, onChange, empty 
         <li key={i} className="group flex gap-3">
           <span className="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground">{i + 1}</span>
           <div className="flex-1">
-            <Edit value={it[a]} onChange={(v) => set(i, a, v)} className="font-semibold" />
-            <Edit value={it[b]} onChange={(v) => set(i, b, v)} className="text-muted-foreground" />
+            <Edit value={String(it[a] ?? "")} onChange={(v) => set(i, a, v)} className="font-semibold" />
+            <Edit value={String(it[b] ?? "")} onChange={(v) => set(i, b, v)} className="text-muted-foreground" />
           </div>
           <button onClick={() => onChange(items.filter((_, j) => j !== i))} className="text-muted-foreground opacity-0 transition group-hover:opacity-100" aria-label="Remover etapa"><X className="h-4 w-4" /></button>
         </li>

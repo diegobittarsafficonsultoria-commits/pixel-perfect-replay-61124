@@ -11,7 +11,7 @@ import { generateProposal } from "@/lib/proposal.functions";
 import { getPending, getSettings, newId, setPending, type Proposal, type ProposalInput } from "@/lib/store";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (s: Record<string, unknown>) => ({ nova: s.nova ? Number(s.nova) : undefined }),
+  validateSearch: (s: Record<string, unknown>): { nova?: number } => (s["nova"] ? { nova: Number(s["nova"]) } : {}),
   head: () => ({
     meta: [
       { title: "Nova proposta — Proposta Rápida" },
