@@ -24,7 +24,7 @@ const f = (v: string) => (v?.trim() ? v.trim() : "[não informado]");
 export const generateProposal = createServerFn({ method: "POST" })
   .inputValidator((d: { input: ProposalInput; empresa: string }) => d)
   .handler(async ({ data }): Promise<{ ok: true; content: ProposalContent } | { ok: false; error: string }> => {
-    const key = process.env.LOVABLE_API_KEY;
+    const key = process.env["LOVABLE_API_KEY"];
     if (!key) return { ok: false, error: "Serviço de IA não configurado." };
     const i = data.input;
     const user = `Consultoria: ${f(data.empresa)}
