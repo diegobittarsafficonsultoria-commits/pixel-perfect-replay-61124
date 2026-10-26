@@ -10,33 +10,62 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ConfiguracoesRouteImport } from './routes/configuracoes'
+import { Route as PropostasRouteImport } from './routes/propostas'
+import { Route as PropostasIdRouteImport } from './routes/propostas.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ConfiguracoesRoute = ConfiguracoesRouteImport.update({
+  id: '/configuracoes',
+  path: '/configuracoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropostasRoute = PropostasRouteImport.update({
+  id: '/propostas',
+  path: '/propostas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PropostasIdRoute = PropostasIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => PropostasRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/propostas': typeof PropostasRouteWithChildren
+  '/propostas/$id': typeof PropostasIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/propostas': typeof PropostasRouteWithChildren
+  '/propostas/$id': typeof PropostasIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/configuracoes': typeof ConfiguracoesRoute
+  '/propostas': typeof PropostasRouteWithChildren
+  '/propostas/$id': typeof PropostasIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/configuracoes' | '/propostas' | '/propostas/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/configuracoes' | '/propostas' | '/propostas/$id'
+  id: '__root__' | '/' | '/configuracoes' | '/propostas' | '/propostas/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ConfiguracoesRoute: typeof ConfiguracoesRoute
+  PropostasRoute: typeof PropostasRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +77,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/configuracoes': {
+      id: '/configuracoes'
+      path: '/configuracoes'
+      fullPath: '/configuracoes'
+      preLoaderRoute: typeof ConfiguracoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/propostas': {
+      id: '/propostas'
+      path: '/propostas'
+      fullPath: '/propostas'
+      preLoaderRoute: typeof PropostasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/propostas/$id': {
+      id: '/propostas/$id'
+      path: '/$id'
+      fullPath: '/propostas/$id'
+      preLoaderRoute: typeof PropostasIdRouteImport
+      parentRoute: typeof PropostasRoute
+    }
   }
 }
 
+interface PropostasRouteChildren {
+  PropostasIdRoute: typeof PropostasIdRoute
+}
+
+const PropostasRouteChildren: PropostasRouteChildren = {
+  PropostasIdRoute: PropostasIdRoute,
+}
+
+const PropostasRouteWithChildren = PropostasRoute._addFileChildren(
+  PropostasRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ConfiguracoesRoute: ConfiguracoesRoute,
+  PropostasRoute: PropostasRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
